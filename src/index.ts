@@ -1,6 +1,14 @@
 import type { Serve } from 'bun';
 import { Hono } from 'hono';
 
+declare module 'bun' {
+    interface Env {
+        PORT?: string;
+        NODE_ENV?: string;
+        TZ?: string;
+    }
+}
+
 const app = new Hono();
 
 app.use(async function (c, next) {
@@ -13,7 +21,7 @@ app.get('/', (c) => {
 });
 
 const server: Serve = {
-    port: 3000,
+    port: process.env.PORT,
     fetch: app.fetch
 };
 

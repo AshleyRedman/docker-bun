@@ -9,20 +9,21 @@ services:
             dockerfile: Dockerfile
         container_name: app
         ports:
-            - '3000:3000'
+            - '${PORT}:${PORT}'
         environment:
             TZ: ${TZ}
             NODE_ENV: ${NODE_ENV}
+            PORR: ${PORT}
         volumes:
             - .:/usr/src/app # Optional: Mount the current directory for live code updates
         networks:
             - network
-        develop:
-            watch:
-                - action: sync
-                  path: .
-                  target: /usr/src/app
-                  ignore:
-                      - node_modules/ # Ignore files/folders like node_modules to avoid syncing them
-                - action: rebuild
-                  path: package.json
+        # develop:
+        #     watch:
+        #         - action: sync
+        #           path: .
+        #           target: /usr/src/app
+        #           ignore:
+        #               - node_modules/ # Ignore files/folders like node_modules to avoid syncing them
+        #         - action: rebuild
+        #           path: package.json
