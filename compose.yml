@@ -15,15 +15,7 @@ services:
             NODE_ENV: ${NODE_ENV}
             PORR: ${PORT}
         volumes:
-            - .:/usr/src/app # Optional: Mount the current directory for live code updates
+            - .:/usr/src/app # Optional: Mount the current directory for live code update
+            - /usr/src/app/node_modules # Ensure node_modules isn't overwritten
         networks:
             - network
-        # develop:
-        #     watch:
-        #         - action: sync
-        #           path: .
-        #           target: /usr/src/app
-        #           ignore:
-        #               - node_modules/ # Ignore files/folders like node_modules to avoid syncing them
-        #         - action: rebuild
-        #           path: package.json

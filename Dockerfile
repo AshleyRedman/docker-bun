@@ -13,26 +13,15 @@ ENV TZ=UTC
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Install dependencies into a temporary directory for development dependencies
+# Install dependencies into a temporary directory
 FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lockb /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
-
-# Install production dependencies into a separate temporary directory
-FROM base AS prod
-RUN mkdir -p /temp/prod
-COPY package.json bun.lockb /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+RUN mkdir -p /temp/install
+COPY package.json bun.lockb /temp/install/
+RUN cd /temp/install && bun install --frozen-lockfile $( [ "$NODE_ENV" = "production" ] && echo "--production" )
 
 # Final stage: Copy appropriate node_modules based on environment
 FROM base AS final
-
-# Choose to copy either dev or prod node_modules based on NODE_ENV
-# Copy the entire node_modules from the appropriate stage
-# COPY --from=install /temp/dev/node_modules node_modules
-# Alternatively, you could use the following for production-only build:
-COPY --from=prod /temp/prod/node_modules node_modules
+COPY --from=dev /temp/install/node_modules node_modules
 
 # Copy all the application files into the final image
 COPY . .
