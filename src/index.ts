@@ -11,18 +11,21 @@ declare module 'bun' {
 
 const app = new Hono();
 
-app.use(async function (c, next) {
-    console.log(process.env);
+app.use(async function (_, next) {
     await next();
 });
 
 app.get('/', (c) => {
-    return c.json({ hello: 'world' });
+    return c.json({
+        hello: 'world'
+    });
 });
 
 const server: Serve = {
     port: process.env.PORT,
     fetch: app.fetch
 };
+
+console.log(`Stage: ${process.env.NODE_ENV}`);
 
 export default server;

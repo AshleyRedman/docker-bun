@@ -9,6 +9,8 @@ RUN apk add --no-cache tzdata
 
 # Set the timezone to UTC
 ENV TZ=UTC
+# Set default environment variable for NODE_ENV (production by default)
+ENV NODE_ENV=production
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -21,13 +23,10 @@ RUN cd /temp/install && bun install --frozen-lockfile $( [ "$NODE_ENV" = "produc
 
 # Final stage: Copy appropriate node_modules based on environment
 FROM base AS final
-COPY --from=dev /temp/install/node_modules node_modules
+COPY --from=install /temp/install/node_modules node_modules
 
 # Copy all the application files into the final image
 COPY . .
-
-# Set default environment variable for NODE_ENV (production by default)
-ENV NODE_ENV=production
 
 # Expose the necessary port
 EXPOSE 3000/tcp
