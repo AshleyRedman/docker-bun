@@ -30,9 +30,9 @@ FROM base AS final
 
 # Choose to copy either dev or prod node_modules based on NODE_ENV
 # Copy the entire node_modules from the appropriate stage
-COPY --from=install /temp/dev/node_modules node_modules
+# COPY --from=install /temp/dev/node_modules node_modules
 # Alternatively, you could use the following for production-only build:
-# COPY --from=prod /temp/prod/node_modules node_modules
+COPY --from=prod /temp/prod/node_modules node_modules
 
 # Copy all the application files into the final image
 COPY . .
