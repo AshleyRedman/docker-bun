@@ -12,10 +12,12 @@ declare module 'bun' {
 const app = new Hono();
 
 app.use(async function (_, next) {
+    console.log('Middlware hit');
     await next();
 });
 
 app.get('/', (c) => {
+    console.log('Route hit');
     return c.json({
         hello: 'world'
     });
