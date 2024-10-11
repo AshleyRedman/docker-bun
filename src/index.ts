@@ -1,5 +1,7 @@
 import type { Serve } from 'bun';
 import { Hono } from 'hono';
+import { home } from './routes';
+import { health } from './routes/health';
 
 declare module 'bun' {
     interface Env {
@@ -11,17 +13,9 @@ declare module 'bun' {
 
 const app = new Hono();
 
-app.use(async function (_, next) {
-    console.log('Middlware hit');
-    await next();
-});
-
-app.get('/', (c) => {
-    console.log('Route hit');
-    return c.json({
-        hello: 'world'
-    });
-});
+app.basePath('/');
+app.route('/', home);
+app.route('/health', health);
 
 const server: Serve = {
     port: process.env.PORT,
