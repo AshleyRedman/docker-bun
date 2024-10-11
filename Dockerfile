@@ -29,7 +29,7 @@ COPY --from=install /temp/install/node_modules node_modules
 COPY . .
 
 # Expose the necessary port
-EXPOSE 3000/tcp
+EXPOSE ${PORT}/tcp
 
 # Define the ENTRYPOINT to use bun for starting the app
 # ENTRYPOINT ["bun", "start"]
